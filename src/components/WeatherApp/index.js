@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions';
-import { City, CitiesList } from '../';
+import { Layout, Header, Content } from 'react-mdl';
+import { CityCard, CitiesList } from '../';
 
 function mapStateToProps(data) {
   return { data };
@@ -16,7 +17,7 @@ function mapDispatchToProps(dispatch) {
 
 const variableChild = (props) => (
   props.params.id ? (
-    <City
+    <CityCard
       actions={props.actions}
       cityId={props.params.id}
       cities={props.data.cities}
@@ -33,16 +34,11 @@ const variableChild = (props) => (
 );
 
 const WeatherApp = (props) => (
-  <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header className="mdl-layout__header">
-      <div className="mdl-layout__header-row">
-        <span className="mdl-layout-title">Weather in cities</span>
-      </div>
-    </header>
-    <main className="mdl-layout__content">
-      <div className="page-content">{variableChild(props)}</div>
-    </main>
-  </div>
+  <Layout>
+    <Header title="Weather in cities">
+    </Header>
+    <Content style={{ margin: '20px' }}>{variableChild(props)}</Content>
+  </Layout>
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(WeatherApp);

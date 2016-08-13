@@ -1,24 +1,43 @@
-import './style.css';
 import React from 'react';
 import { Link } from 'react-router';
+import { Card, CardTitle, CardText, CardMenu, CardActions, IconButton, Textfield } from 'react-mdl';
+import { CURRENT_POSITION_CITY } from '../../constants';
 
 export default ({ cityId, city, currentWeather, actions }) => (
-  <div className="mdl-card mdl-shadow--2dp city-card-square">
-    <div className="mdl-card__title mdl-card--expand">
-      <h2 className="mdl-card__title-text">{city.city}</h2>
-    </div>
-    <div className="mdl-card__supporting-text">
+  <Card shadow={0} style={{
+    width: '320px',
+    height: '220px',
+    margin: '20px',
+    float: 'left'
+  }}>
+    <CardTitle expand style={{ background: '#46b6ac', color: '#fff' }}>
+      {
+        city === CURRENT_POSITION_CITY ? 'Текущая позиция' : <Textfield
+          label="Город"
+          value={city}
+          onChange={e => actions.cityChange(cityId, e.target.value, false)}
+          onBlur={e => actions.cityChange(cityId, e.target.value)}
+        />
+      }
+    </CardTitle>
+    <CardMenu style={{color: '#fff'}}>
+      <IconButton
+        name="close"
+        onClick={() => actions.removeCity(cityId)}
+      />
+    </CardMenu>
+    <CardText>
       {getCardInner(currentWeather.main)}
-    </div>
-    <div className="mdl-card__actions mdl-card--border">
+    </CardText>
+    <CardActions border>
       <Link
         className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
         to={`/cities/${cityId}`}
       >
         Подробнее
       </Link>
-    </div>
-  </div>
+    </CardActions>
+  </Card>
 );
 
 function getCardInner(data) {

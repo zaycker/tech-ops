@@ -4,9 +4,9 @@ import {
   API_KEY
 } from '../constants';
 
-export async function getDailyCityWeather(cityObject) {
+export async function getDailyCityWeather(city) {
   const getRequestUrl = CITY_DAILY_WEATHER_API_URL +
-      `?q=${cityObject.city},${cityObject.countryCode}&appid=${API_KEY}&cnt=1`;
+      `?q=${city}&appid=${API_KEY}&cnt=1&units=metric&lang=ru`;
   try {
     const response = await window.fetch(getRequestUrl);
     return await response.json();
@@ -15,9 +15,39 @@ export async function getDailyCityWeather(cityObject) {
   }
 }
 
-export async function getCurrentCityWeather(cityObject) {
+const getLocation = async () => {
+  if (!window.navigator.geolocation) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise((resolve, reject) =>
+    window.navigator.geolocation.getCurrentPosition(position => resolve(position), () => resolve(null)));
+};
+
+async function getCurrentCityWeatherByLocation() {
+  const position = await getLocation();
+
+  if (!position) {
+    return null;
+  }
+
   const getRequestUrl = CITY_CURRENT_WEATHER_API_URL +
-    `?q=${cityObject.city},${cityObject.countryCode}&appid=${API_KEY}&units=metric`;
+    `?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${API_KEY}&units=metric`;
+  try {
+    const response = await window.fetch(getRequestUrl);
+    return await response.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function getCurrentCityWeather(city) {
+  if (!city) {
+    return getCurrentCityWeatherByLocation();
+  }
+
+  const getRequestUrl = CITY_CURRENT_WEATHER_API_URL +
+    `?q=${city}&appid=${API_KEY}&units=metric&lang=ru`;
   try {
     const response = await window.fetch(getRequestUrl);
     return await response.json();

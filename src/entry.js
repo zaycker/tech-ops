@@ -11,7 +11,7 @@ import store from './store';
 
 const history = syncHistoryWithStore(hashHistory, store);
 
-store.dispatch(actions.loadCities());
+store.dispatch(actions.loadCities(true));
 
 render((
   <Provider store={store}>

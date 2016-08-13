@@ -1,5 +1,5 @@
 import React from 'react';
-import { CityCardListItem } from '../';
+import { CityCardListItem, CardNew } from '../';
 
 export default (props) => (
   <div>
@@ -8,11 +8,16 @@ export default (props) => (
         <CityCardListItem
           city={city}
           cityId={key}
-          currentWeather={props.currentWeather[city.city] || {}}
+          currentWeather={props.currentWeather[city] || {}}
           key={key}
           actions={props.actions}
         />
       ))
     }
+    <CardNew
+      key={props.cities.length}
+      cities={props.cities}
+      actions={props.actions}
+    />
   </div>
 );
